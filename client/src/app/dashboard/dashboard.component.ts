@@ -32,7 +32,8 @@ export class DashboardComponent implements OnInit {
     }
 
     deleteCandidato(candidato) {
-        console.log('candidato removido>', candidato);
+
+        this.candidatos.splice(this.candidatos.findIndex((element, index, array) => element.nome === candidato.nome), 1);
     }
 
     concluirVotacao(formValue) {
