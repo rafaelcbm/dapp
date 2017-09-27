@@ -1,0 +1,36 @@
+.wrapper{
+	display: grid;
+	grid-template-columns: 1fr 6fr 1fr;
+}
+
+.center{
+	display: grid;
+	grid-template-columns: 1fr;
+}
+
+.main{
+	display: grid;
+	grid-template-columns: 1fr;
+}
+
+.frm-candidato{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 5fr 1fr;
+    grid-column-gap: 0.5em;
+    align-items: center;
+}
+
+.lbl-Numero, .lbl-Nome{
+    justify-self: end;
+}
+
+.list-candidatos{
+    display: grid;
+    grid-template-columns: 1fr 10fr 1fr;
+    grid-gap: 0.5em;
+    align-items: center;
+}
+
+.card-footer{
+    text-align: center;
+}
