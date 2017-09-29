@@ -34,10 +34,10 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective
   ],
-  providers: [{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }],
+//   providers: [{
+//     provide: LocationStrategy,
+//     useClass: HashLocationStrategy
+//   }],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

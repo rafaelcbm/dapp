@@ -20,7 +20,7 @@ userRouter.get('/all', function (request: Request, response: Response, next: Nex
                         status: 'sucesso',
                         data: users
                     })
-                }, 10000);
+                }, 2000);
             });
     } catch (err) {
         logger.error('## Erro ao obter conexão com MongoBD: %j', err);

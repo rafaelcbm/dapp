@@ -9,6 +9,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DashboardComponent implements OnInit {
 
+    cadastroVotacaoConcluida = false;
+
     users: any[];
 
     candidatos: any[] = [];
@@ -18,10 +20,6 @@ export class DashboardComponent implements OnInit {
     constructor(private http: HttpClient) { }
 
     ngOnInit(): void {
-
-        this.http.get('/api/users/all').subscribe(
-            (resposta: any) => this.users = resposta.data
-        );
     }
 
     addCandidato() {
@@ -36,7 +34,16 @@ export class DashboardComponent implements OnInit {
         this.candidatos.splice(this.candidatos.findIndex((element, index, array) => element.nome === candidato.nome), 1);
     }
 
-    concluirVotacao(formValue) {
-        console.log('Votação concluida');
+    concluirVotacao() {
+        if (!this.cadastroVotacaoConcluida) {
+
+            this.http.get('/api/users/all').subscribe(
+                (resposta: any) => {
+                    console.log('Contrato recebido:', resposta.data)
+                    console.log('Votação Criada');
+                    this.cadastroVotacaoConcluida = true;
+                }
+            );
+        }
     }
 }

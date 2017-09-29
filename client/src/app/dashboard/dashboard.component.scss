@@ -1,3 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Architects+Daughter');
+@import url('https://fonts.googleapis.com/css?family=Iceland');
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:600');
+
+.header-eleicoes{
+    h1,h2{
+        display: inline;
+    }
+    h2{
+        font-size: 2em;
+    }
+    font-family: 'Architects Daughter', cursive;
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+
+.header-blockchain{
+    // font-family: 'Architects Daughter', cursive;
+    font-family: 'Iceland', cursive;
+    color: #5190bd;
+    font-weight: bold;
+    font-size: 3.5em;
+}
+
 .wrapper{
 	display: grid;
 	grid-template-columns: 1fr 6fr 1fr;
@@ -8,7 +33,7 @@
 	grid-template-columns: 1fr;
 }
 
-.main{
+.main-cadastro-candidatos{
 	display: grid;
 	grid-template-columns: 1fr;
 }
@@ -42,6 +67,36 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+.main-votacao{
+	display: grid;
+	grid-template-columns: 1fr;
+}
+
 .card-footer{
     text-align: center;
+}
+
+.inputs-border{
+    border: 1px solid #d1d4d7;
+}
+
+.list-candidatos-wrapper-votacao{
+    margin-top: 2em;
+    padding: 1em;
+    border-radius: 0.5em;
+    border: 2px solid gray;
+}
+
+.list-candidatos-votacao{
+    display: grid;
+    grid-template-columns: 2fr 10fr 3fr;
+    grid-gap: 0.5em;
+    align-items: center;
+    /*Font*/
+    font-size: 3em;
+    font-family: 'Work Sans', sans-serif;
+
+    .list-candidatos-votacao-numero{
+        justify-self:center;
+    }
 }
