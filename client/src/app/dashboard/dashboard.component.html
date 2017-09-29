@@ -1,15 +1,7 @@
-<div class="animated fadeIn">
-    Data from Server:
-    <br>
-    <ul>
-        <li *ngFor="let user of users">{{user.userId}} - {{user.userName}}</li>
-    </ul>
-</div>
-
 <div class="wrapper">
-    <div>left</div>
+    <div></div>
     <div class="center">
-        <header>
+        <header style="text-align: center;">
             <h1>Eleições Presidenciais</h1>
         </header>
         <section class="main">
@@ -33,18 +25,20 @@
 
                     </section>
 
-                    <section class="list-candidatos" *ngFor="let c of candidatos">
-                        <div>{{c.numero}}</div>
-                        <div>{{c.nome}}</div>
-                        <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-close"></i></button>
-                    </section>
+                    <div *ngIf="candidatos.length>0" class="list-candidatos-wrapper">
+                        <section class="list-candidatos" *ngFor="let c of candidatos">
+                            <div>{{c.numero}}</div>
+                            <div>{{c.nome}}</div>
+                            <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-close"></i></button>
+                        </section>
 
+                    </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Concluir Votação</button>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
                 </div>
             </div>
         </section>
     </div>
-    <div>right</div>
+    <div></div>
 </div>
