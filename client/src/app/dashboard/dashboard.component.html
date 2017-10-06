@@ -1,50 +1,62 @@
-<div class="animated fadeIn">
-    Data from Server:
-    <br>
-    <ul>
-        <li *ngFor="let user of users">{{user.userId}} - {{user.userName}}</li>
-    </ul>
-</div>
-
 <div class="wrapper">
-    <div>left</div>
+    <div></div>
     <div class="center">
-        <header>
-            <h1>Eleições Presidenciais</h1>
+        <header class="header-eleicoes">
+            <h2>Eleições na </h2>
+            <h1 class="header-blockchain">Blockchain</h1>
         </header>
-        <section class="main">
+        <section *ngIf="!cadastroVotacaoConcluida" class="main-cadastro-candidatos">
             <div class="card">
                 <div class="card-header">
                     <strong>Candidatos</strong>
-                    <small>Presidente</small>
                 </div>
                 <div class="card-block">
                     <section class="frm-candidato">
 
                         <label class="form-control-label lbl-Numero">Numero:</label>
                         <div>
-                            <input required [(ngModel)]="numeroCandidato" id="Numero" name="Numero" placeholder="Numero" class="form-control">
+                            <input required [(ngModel)]="numeroCandidato" id="Numero" name="Numero" placeholder="Numero" class="form-control inputs-border">
                         </div>
                         <label id="campoNome" class="form-control-label lbl-Nome">Nome:</label>
                         <div>
-                            <input required [(ngModel)]="nomeCandidato" id="nome" name="nome" placeholder="Nome Candidato" class="form-control">
+                            <input required [(ngModel)]="nomeCandidato" id="nome" name="nome" placeholder="Nome Candidato" class="form-control inputs-border">
                         </div>
                         <button (click)="addCandidato()" type="button" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i></button>
 
                     </section>
 
-                    <section class="list-candidatos" *ngFor="let c of candidatos">
-                        <div>{{c.numero}}</div>
-                        <div>{{c.nome}}</div>
-                        <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-close"></i></button>
-                    </section>
+                    <div *ngIf="candidatos.length>0" class="list-candidatos-wrapper">
+                        <section class="list-candidatos" *ngFor="let c of candidatos">
+                            <div>{{c.numero}}</div>
+                            <div>{{c.nome}}</div>
+                            <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-close"></i></button>
+                        </section>
 
+                    </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Concluir Votação</button>
+                    <button type="button" (click)="concluirVotacao()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
+                </div>
+            </div>
+        </section>
+
+        <section *ngIf="cadastroVotacaoConcluida" class="main-votacao">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Votação</strong>
+                </div>
+                <div class="card-block">
+                    <div *ngIf="candidatos.length>0" class="list-candidatos-wrapper-votacao">
+                        <section class="list-candidatos-votacao" *ngFor="let c of candidatos">
+                            <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
+                            <div>{{c.nome}}</div>
+                            <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-hand-pointer-o"></i> Votar</button>
+                        </section>
+
+                    </div>
                 </div>
             </div>
         </section>
     </div>
-    <div>right</div>
+    <div></div>
 </div>
