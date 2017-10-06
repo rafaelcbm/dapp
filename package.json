@@ -66,6 +66,9 @@
     "logops": "^1.0.7",
     "serve-favicon": "~2.3.0",
     "mongodb": "2.2.29",
-    "@types/mongodb": "2.2.7"
+    "@types/mongodb": "2.2.7",
+    "truffle-contract": "^3.0.0",
+    "web3": "1.0.0-beta.22",
+    "solc":"^0.4.17"
   }
 }
