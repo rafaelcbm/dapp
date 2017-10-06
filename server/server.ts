@@ -12,11 +12,7 @@ startServer();
 async function startServer() {
     logger.info('Iniciando server ............');
 
-<<<<<<< HEAD
 	//await connectDB();
-=======
-    await connectDB();
->>>>>>> f8e661dc2df2ff7c5095101b50e110f53409bed1
 
     http.createServer(app).listen(port, function () {
         logger.info('Servidor escutando na porta: ' + this.address().port);
