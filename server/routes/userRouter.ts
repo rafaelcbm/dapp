@@ -8,52 +8,10 @@ var Web3 = require('web3');
 //import { default as solc } from 'solc';
 var solc = require('solc');
 //import { default as solc } from 'solc';
-
-
 // import { default as Web3 } from 'web3';
 // import { default as solc } from 'solc';
 
-import { UserService } from '../services';
-
 export const userRouter: Router = Router();
-
-const userService = new UserService();
-
-userRouter.get('/all', function (request: Request, response: Response, next: NextFunction) {
-
-    try {
-        const usersOnService = userService.getUsers().then(
-            users => {
-                setTimeout(() => {
-                    logger.info('Esperando ............');
-                    response.json({
-                        status: 'sucesso',
-                        data: users
-                    })
-                }, 2000);
-            });
-    } catch (err) {
-        logger.error('## Erro ao obter conexão com MongoBD: %j', err);
-        throw err;
-    }
-});
-
-userRouter.post('/', function (request: Request & { userName: string }, response: Response, next: NextFunction) {
-
-    const userName = request.body.userName;
-
-    try {
-        userService.insertUser(userName).then(
-            data => response.status(201).json({
-                status: 'sucesso'
-            })
-        );
-    } catch (err) {
-        logger.error(err);
-        throw err;
-    }
-});
-
 
 userRouter.get('/deploy', function (request: Request, response: Response, next: NextFunction) {
 
@@ -129,16 +87,21 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
                                 newContractInstance.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0x483bfa39124f77404faf37a209ca6ea2ce3cc1c2' })
                                     .then(function (qtdVotos) {
                                         console.log('qtdVotos: ', qtdVotos);
+
+                                        // let methodABI = newContractInstance.methods.totalVotesFor(123).encodeABI();
+                                        // console.log('methodABI: ', methodABI);
+
                                         response.json({
                                             status: 'sucesso',
                                             data: {
-                                                abiDefinition:abiDefinition,
+                                                abi:abiDefinition,
                                                 contractData:newContractInstance.options.data,
                                                 hashContrato: contractTransactionHash,
                                                 enderecoContrato: newContractInstance.options.address,
                                                 recibo: receipt,
                                                 recibo2: receipt2,
                                                 votos: qtdVotos
+                                                //methodABI:methodABI
                                             }
                                         })
                                     });

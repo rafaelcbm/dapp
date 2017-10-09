@@ -1,3 +1,4 @@
+import { json } from 'body-parser';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -43,7 +44,19 @@ export class DashboardComponent implements OnInit {
     chamarContrato() {
 
         this.http.get('/api/users/deploy').subscribe(
-            (resposta: any) => console.log(resposta)
+            (resposta: any) => {
+                console.log(resposta);
+
+                console.log(resposta.data.abi);
+
+                let VotingContract = new this.web3.eth.Contract(resposta.data.abi, resposta.data.enderecoContrato);
+                console.log('VotingContract: ', VotingContract);
+
+                VotingContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0x483bfa39124f77404faf37a209ca6ea2ce3cc1c2' })
+                    .then(function (qtdVotos) {
+                        console.log('qtdVotos: ', qtdVotos);
+                    });
+            }
         );
     }
 
@@ -61,14 +74,6 @@ export class DashboardComponent implements OnInit {
                 alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
                 return;
             }
-
-            // if (!this.accounts || this.accounts.length != accs.length || this.accounts[0] != accs[0]) {
-            //     console.log("Observed new accounts");
-            //     this.accountsObservable.next(accs);
-            //     this.accounts = accs;
-            // }
-
-            // this.ready = true;
         });
     }
 
@@ -86,17 +91,8 @@ export class DashboardComponent implements OnInit {
 
     concluirVotacao() {
 
-        this.chamarContrato();
-
         if (!this.cadastroVotacaoConcluida) {
-
-            this.http.get('/api/users/all').subscribe(
-                (resposta: any) => {
-                    console.log('Contrato recebido:', resposta.data)
-                    console.log('Votação Criada');
-                    this.cadastroVotacaoConcluida = true;
-                }
-            );
+            this.chamarContrato();
         }
     }
 }
