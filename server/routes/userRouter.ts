@@ -132,6 +132,8 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
                                         response.json({
                                             status: 'sucesso',
                                             data: {
+                                                abiDefinition:abiDefinition,
+                                                contractData:newContractInstance.options.data,
                                                 hashContrato: contractTransactionHash,
                                                 enderecoContrato: newContractInstance.options.address,
                                                 recibo: receipt,
