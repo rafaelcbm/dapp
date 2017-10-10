@@ -1,7 +1,7 @@
 import { json } from 'body-parser';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { default as Web3 } from 'web3';
 
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
         this.windowRef = window;
 
         if (typeof this.windowRef.web3 !== 'undefined') {
-            console.warn("Using web3 detected from external source like Metamask")
+            console.warn("Using web3 detected from external source like Metamask or MIST Browser")
             // Use Mist/MetaMask's provider
             this.web3 = new Web3(this.windowRef.web3.currentProvider);
         } else {
@@ -92,7 +92,15 @@ export class DashboardComponent implements OnInit {
     concluirVotacao() {
 
         if (!this.cadastroVotacaoConcluida) {
-            this.chamarContrato();
+
+            let requestOptions:any = {
+                headers: new HttpHeaders({ "Content-Type": "application/json"})
+            }
+
+            this.http.post('/api/users/deploy', JSON.stringify(this.candidatos), requestOptions)
+                .subscribe((response: any) => console.log('Resposta:', response));
+
+            //this.chamarContrato();
         }
     }
 }

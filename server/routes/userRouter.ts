@@ -13,6 +13,25 @@ var solc = require('solc');
 
 export const userRouter: Router = Router();
 
+
+userRouter.post("/", function (request: Request, response: Response, next: NextFunction) {
+
+    let candidatos = request.body.candidatos;
+
+    try {
+        console.log('candidatos: ', candidatos);
+
+        response.json({
+            status: 'sucesso',
+            data: 'candidados cadastrados'
+        });
+
+    } catch (err) {
+        throw err;
+    }
+});
+
+
 userRouter.get('/deploy', function (request: Request, response: Response, next: NextFunction) {
 
     try {
@@ -94,8 +113,8 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
                                         response.json({
                                             status: 'sucesso',
                                             data: {
-                                                abi:abiDefinition,
-                                                contractData:newContractInstance.options.data,
+                                                abi: abiDefinition,
+                                                contractData: newContractInstance.options.data,
                                                 hashContrato: contractTransactionHash,
                                                 enderecoContrato: newContractInstance.options.address,
                                                 recibo: receipt,
