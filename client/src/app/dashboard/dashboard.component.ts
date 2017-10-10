@@ -93,11 +93,11 @@ export class DashboardComponent implements OnInit {
 
         if (!this.cadastroVotacaoConcluida) {
 
-            let requestOptions:any = {
-                headers: new HttpHeaders({ "Content-Type": "application/json"})
+            let requestOptions: any = {
+                headers: new HttpHeaders({ "Content-Type": "application/json" })
             }
 
-            this.http.post('/api/users/deploy', JSON.stringify(this.candidatos), requestOptions)
+            this.http.post('/api/users/deploy', JSON.stringify({ candidatos: this.candidatos }), requestOptions)
                 .subscribe((response: any) => console.log('Resposta:', response));
 
             //this.chamarContrato();

@@ -14,16 +14,16 @@ var solc = require('solc');
 export const userRouter: Router = Router();
 
 
-userRouter.post("/", function (request: Request, response: Response, next: NextFunction) {
+userRouter.post("/deploy", function (request: Request, response: Response, next: NextFunction) {
 
     let candidatos = request.body.candidatos;
 
     try {
-        console.log('candidatos: ', candidatos);
+        logger.info('candidatos: ', candidatos);
 
-        response.json({
-            status: 'sucesso',
-            data: 'candidados cadastrados'
+        response.status(201).json({
+            "status": 'sucesso',
+            "data": 'candidados cadastrados'
         });
 
     } catch (err) {
