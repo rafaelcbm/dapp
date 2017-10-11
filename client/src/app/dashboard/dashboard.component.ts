@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
                 let VotingContract = new this.web3.eth.Contract(resposta.data.abi, resposta.data.enderecoContrato);
                 console.log('VotingContract: ', VotingContract);
 
-                VotingContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0x483bfa39124f77404faf37a209ca6ea2ce3cc1c2' })
+                VotingContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0xbbf983e94876ad75a7dcd751b4dcf85e28375ccd' })
                     .then(function (qtdVotos) {
                         console.log('qtdVotos: ', qtdVotos);
                     });
