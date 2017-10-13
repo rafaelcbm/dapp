@@ -39,6 +39,10 @@ let VotingContract = new web3.eth.Contract(abiDefinition);
 logger.info('VotingContract: ', VotingContract);
 let byteCode = compiledCode.contracts[':Voting'].bytecode;
 logger.info('byteCode: ', byteCode);
+//Correção de bug da ferramenta
+byteCode = '0x' + byteCode;
+logger.info('compiledCode com prefixo: ', byteCode);
+
 
 // logger.info('tx.gasprice: ', tx.gasprice);
 // logger.info('msg.gas: ', msg.gas);
@@ -47,7 +51,7 @@ logger.info('byteCode: ', byteCode);
 //let deployedContract = VotingContract.new(['Rama','Nick','Jose'],{data: byteCode, from: web3.eth.accounts[0], gas: 4700000})
 //TODO: POR esse expmlo de https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#deploy
 
-let contractTransactionHash = undefined;
+let transactionHashContrato;
 
 VotingContract.options.data = byteCode;
 
@@ -63,6 +67,7 @@ userRouter.post("/deploy", function (request: Request, response: Response, next:
         logger.info('CandidatosToHex:', candidatosToHex);
 
         VotingContract.deploy({
+            //data: byteCode
             // arguments: [[web3.utils.asciiToHex('Rama'), web3.utils.asciiToHex('Nick'), web3.utils.asciiToHex('Jose')]]
             arguments: [candidatosToHex]
         })
@@ -70,7 +75,7 @@ userRouter.post("/deploy", function (request: Request, response: Response, next:
             //         console.log('estimateGas: ', gas);//  338688
             //     })
             .send({
-                from: '0xbbf983e94876ad75a7dcd751b4dcf85e28375ccd',
+                from: '0x00d091E3b56518e1d34f218239da72907EB74f43',
                 //gasPrice: '1000000',
                 gas: 338688//318984 // 338688 pro exemplo Nick, Rama, Jose - Mudar, tirando do construtor
             })
@@ -80,7 +85,7 @@ userRouter.post("/deploy", function (request: Request, response: Response, next:
             })
             .on('transactionHash', function (transactionHash) {
                 console.log('Contrato Criado - transactionHash: ', transactionHash);
-                contractTransactionHash = transactionHash;
+                transactionHashContrato;
             })
             .then(function (newContractInstance) {
                 console.log('newContractInstance.options: ', newContractInstance.options);
@@ -91,7 +96,7 @@ userRouter.post("/deploy", function (request: Request, response: Response, next:
                     data: {
                         abi: abiDefinition,
                         contractData: newContractInstance.options.data,
-                        hashContrato: contractTransactionHash,
+                        transactionHashContrato: transactionHashContrato,
                         enderecoContrato: newContractInstance.options.address
                     }
                 });
@@ -116,8 +121,8 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
 
     try {
 
-        let VotingContract = new web3.eth.Contract(abiDefinition, '0x9672a16bdeA354b6ea7102523B95BC0195293DBa');
-        VotingContract.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0xbbf983e94876ad75a7dcd751b4dcf85e28375ccd' })
+        let VotingContract = new web3.eth.Contract(abiDefinition, '0xf0ab11C74A75bA22Bbc4Be254bCE28A1d4A24D1b');
+        VotingContract.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .then(function (qtdVotos) {
                 console.log('qtdVotos: ', qtdVotos);
 
@@ -135,7 +140,7 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
         //     arguments: [[web3.utils.asciiToHex('Rama'), web3.utils.asciiToHex('Nick'), web3.utils.asciiToHex('Jose')]]
         // })
         //     .send({
-        //         from: '0xbbf983e94876ad75a7dcd751b4dcf85e28375ccd',
+        //         from: '0x00d091E3b56518e1d34f218239da72907EB74f43',
         //         //gasPrice: '1000000',
         //         gas: 338688
         //     })
@@ -145,23 +150,23 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
         //     })
         //     .on('transactionHash', function (transactionHash) {
         //         console.log('Contrato Criado - transactionHash: ', transactionHash);
-        //         contractTransactionHash = transactionHash;
+        //         transactionHashContrato;
         //     })
         //     .then(function (newContractInstance) {
         //         console.log('newContractInstance.options: ', newContractInstance.options);
         //         console.log('newContractInstance.options.address: ', newContractInstance.options.address); // instance with the new contract address
 
         //         // Votando
-        //         newContractInstance.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({ from: '0xbbf983e94876ad75a7dcd751b4dcf85e28375ccd' })
+        //         newContractInstance.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
         //             .then(function (receipt) {
         //                 console.log('receipt: ', receipt);
         //                 console.log('receipt.transactionHash: ', receipt.transactionHash);
 
-        //                 newContractInstance.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({ from: '0xbbf983e94876ad75a7dcd751b4dcf85e28375ccd' })
+        //                 newContractInstance.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
         //                     .then(function (receipt2) {
         //                         console.log('receipt2: ', receipt2);
 
-        //                         newContractInstance.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0xbbf983e94876ad75a7dcd751b4dcf85e28375ccd' })
+        //                         newContractInstance.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
         //                             .then(function (qtdVotos) {
         //                                 console.log('qtdVotos: ', qtdVotos);
 
@@ -173,7 +178,7 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
         //                                     data: {
         //                                         abi: abiDefinition,
         //                                         contractData: newContractInstance.options.data,
-        //                                         hashContrato: contractTransactionHash,
+        //                                         hashContrato: transactionHashContrato,
         //                                         enderecoContrato: newContractInstance.options.address,
         //                                         recibo: receipt,
         //                                         recibo2: receipt2,
