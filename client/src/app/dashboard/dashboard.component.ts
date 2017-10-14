@@ -1,4 +1,3 @@
-import { json } from 'body-parser';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -11,6 +10,9 @@ import { default as Web3 } from 'web3';
 
 })
 export class DashboardComponent implements OnInit {
+
+    contractAddress: any;
+    contractAbi: any;
 
     windowRef: any;
     web3: Web3;
@@ -33,9 +35,9 @@ export class DashboardComponent implements OnInit {
             // Use Mist/MetaMask's provider
             this.web3 = new Web3(this.windowRef.web3.currentProvider);
         } else {
-            console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+            console.warn("No web3 detected. Falling back to http://localhost:8549. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
             // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-            this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+            this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8549"));
         }
 
         this.mostrarContas();
@@ -43,21 +45,132 @@ export class DashboardComponent implements OnInit {
 
     chamarContrato() {
 
-        this.http.get('/api/users/deploy').subscribe(
+        this.http.get('/api/votacao/deploy').subscribe(
             (resposta: any) => {
                 console.log(resposta);
 
                 console.log(resposta.data.abi);
 
-                let VotingContract = new this.web3.eth.Contract(resposta.data.abi, resposta.data.enderecoContrato);
-                console.log('VotingContract: ', VotingContract);
+                let VotacaoContract = new this.web3.eth.Contract(resposta.data.abi, resposta.data.enderecoContrato);
+                console.log('VotacaoContract: ', VotacaoContract);
 
-                VotingContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0xbbf983e94876ad75a7dcd751b4dcf85e28375ccd' })
+                VotacaoContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
                     .then(function (qtdVotos) {
                         console.log('qtdVotos: ', qtdVotos);
                     });
             }
         );
+    }
+
+    criarContrato() {
+        this.http.get('/api/votacao/deploy').subscribe(
+            (resposta: any) => {
+                console.log('resposta deploy: ', resposta);
+
+                this.contractAbi = resposta.data.abi;
+                this.contractAddress = resposta.data.enderecoContrato;
+
+                // let VotacaoContract = new this.web3.eth.Contract(resposta.data.abi, resposta.data.enderecoContrato);
+                // console.log('VotacaoContract: ', VotacaoContract);
+
+                // VotacaoContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
+                //     .then(function (qtdVotos) {
+                //         console.log('qtdVotos: ', qtdVotos);
+                //     });
+            }
+        );
+    }
+
+    obterQtdVotosTotais() {
+
+        let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
+        console.log('VotacaoContract: ', VotacaoContract);
+
+        VotacaoContract.methods.totalVotes().call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
+            .then(function (qtdVotos) {
+                console.log('qtdVotos: ', qtdVotos);
+            });
+
+
+        // this.http.get('/api/votacao/votosTotais').subscribe(
+        //     (resposta: any) => {
+        //         console.log('resposta qtdVotos Totais: ', resposta);
+        //     }
+        // );
+    }
+
+
+    obterQtdVotosCandidato(numeroCandidato) {
+        console.log('numeroCandidato: ', numeroCandidato);
+
+        let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
+        console.log('VotacaoContract: ', VotacaoContract);
+
+        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
+            .then(function (qtdVotosCandidato) {
+                console.log('qtdVotosCandidato: ', qtdVotosCandidato);
+            });
+
+        // this.http.get(`/api/votacao/votosCandidato/${numeroCandidato}`).subscribe(
+        //     (resposta: any) => {
+        //         console.log(`resposta qtdVotos Candidato : ${numeroCandidato}` , resposta);
+        //     }
+        // );
+    }
+
+
+    votarCandidato(numeroCandidato) {
+        // this.http.get(`/api/votacao/votar/${numeroCandidato}`).subscribe(
+        //     (resposta: any) => {
+        //         console.log(`resposta Votar Candidato : ${numeroCandidato}` , resposta);
+        //     }
+        // );
+
+        try {
+            console.log('numeroCandidato: ', numeroCandidato);
+
+            let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
+            VotacaoContract.methods.voteForCandidate(numeroCandidato).send({ from: '0xc2364e0b0897dc3029103d8bef8b003a55ce7e34' })
+                .on('transactionHash', function (hash) {
+                    console.log('transactionHash: ', hash);
+                })
+                .on('confirmation', function (confirmationNumber, receipt) {
+                    console.log('confirmation: ', confirmationNumber);
+                })
+                .on('receipt', function (receipt) {
+                    console.log(receipt);
+                })
+                .on('error', console.error);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    adicionarCandidato(nomeCandidato, numeroCandidato) {
+        try {
+            console.log('nomeCandidato: ', nomeCandidato);
+            console.log('numeroCandidato: ', numeroCandidato);
+
+            // using the event emitter            
+            console.log('this.contractAbi: ', this.contractAbi);
+            console.log('this.contractAddress: ', this.contractAddress);
+
+            let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
+            VotacaoContract.methods.addCandidato(nomeCandidato, numeroCandidato)
+                .send({ from: '0xc2364e0b0897dc3029103d8bef8b003a55ce7e34' })
+                .on('transactionHash', function (hash) {
+                    console.log('transactionHash: ', hash);
+                })
+                .on('confirmation', function (confirmationNumber, receipt) {
+                    console.log('confirmation: ', confirmationNumber);
+                })
+                .on('receipt', function (receipt) {
+                    console.log(receipt);
+                })
+                .on('error', console.error);
+        } catch (err) {
+            throw err;
+        }
     }
 
     mostrarContas() {
@@ -97,7 +210,7 @@ export class DashboardComponent implements OnInit {
                 headers: new HttpHeaders({ "Content-Type": "application/json" })
             }
 
-            this.http.post('/api/users/deploy', JSON.stringify({ candidatos: this.candidatos }), requestOptions)
+            this.http.post('/api/votacao/deploy', JSON.stringify({ candidatos: this.candidatos }), requestOptions)
                 .subscribe((response: any) => console.log('Resposta:', response));
 
             //this.chamarContrato();

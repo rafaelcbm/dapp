@@ -35,7 +35,11 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="button" (click)="concluirVotacao()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
+                    <button type="button" (click)="criarContrato()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
+                    <button type="button" (click)="adicionarCandidato('rafael', 32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Adicionar Candidato</button>
+                    <button type="button" (click)="votarCandidato(32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Votar Candidato</button>
+                    <button type="button" (click)="obterQtdVotosCandidato(32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Total Votos Candidato</button>
+                    <button type="button" (click)="obterQtdVotosTotais()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Total Votos</button>
                 </div>
             </div>
         </section>

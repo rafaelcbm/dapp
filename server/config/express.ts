@@ -5,7 +5,7 @@ import { join } from 'path';
 import * as favicon from 'serve-favicon';
 import { json, urlencoded } from 'body-parser';
 
-import { userRouter } from '../routes';
+import { votacaoRouter } from '../routes';
 
 export const app: express.Application = express();
 
@@ -25,7 +25,7 @@ app.use(urlencoded({ extended: true }));
 
 
 // ****** API routes  ******
-app.use('/api/users', userRouter);
+app.use('/api/votacao', votacaoRouter);
 
 
 // error handlers
