@@ -5,7 +5,7 @@
             <h2>Eleições na </h2>
             <h1 class="header-blockchain">Blockchain</h1>
         </header>
-        <section *ngIf="!cadastroVotacaoConcluida" class="main-cadastro-candidatos">
+        <section *ngIf="!cadastroVotacaoConcluida && !votacaoConcluida" class="main-cadastro-candidatos">
             <div class="card">
                 <div class="card-header">
                     <strong>Candidatos</strong>
@@ -21,7 +21,9 @@
                         <div>
                             <input required [(ngModel)]="nomeCandidato" id="nome" name="nome" placeholder="Nome Candidato" class="form-control inputs-border">
                         </div>
-                        <button (click)="addCandidato()" type="button" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i></button>
+                        <button (click)="addCandidato()" type="button" class="btn btn-sm btn-primary">
+                            <i class="fa fa-plus"></i>
+                        </button>
 
                     </section>
 
@@ -29,17 +31,27 @@
                         <section class="list-candidatos" *ngFor="let c of candidatos">
                             <div>{{c.numero}}</div>
                             <div>{{c.nome}}</div>
-                            <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-close"></i></button>
+                            <div>HASH DA TRANSACAO</div>
+                            <!-- <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger">
+                                <i class="fa fa-close"></i>
+                            </button> -->
                         </section>
 
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="button" (click)="criarContrato()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
-                    <button type="button" (click)="adicionarCandidato('rafael', 32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Adicionar Candidato</button>
-                    <button type="button" (click)="votarCandidato(32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Votar Candidato</button>
-                    <button type="button" (click)="obterQtdVotosCandidato(32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Total Votos Candidato</button>
-                    <button type="button" (click)="obterQtdVotosTotais()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger"><i class="fa fa-dot-circle-o"></i> Total Votos</button>
+                    <button type="button" (click)="criarContrato()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
+                        <i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
+                    <button type="button" (click)="concluirCadastroVotacao()" [class.disabled]="concluirCadastroVotacao" class="btn btn-sm btn-danger">
+                        <i class="fa fa-dot-circle-o"></i> Concluir Cadastro Candidatos</button>
+                    <!-- <button type="button" (click)="adicionarCandidato('rafael', 32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
+                        <i class="fa fa-dot-circle-o"></i> Adicionar Candidato</button>
+                    <button type="button" (click)="votarCandidato(32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
+                        <i class="fa fa-dot-circle-o"></i> Votar Candidato</button>
+                    <button type="button" (click)="obterQtdVotosCandidato(32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
+                        <i class="fa fa-dot-circle-o"></i> Total Votos Candidato</button>
+                    <button type="button" (click)="obterQtdVotosTotais()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
+                        <i class="fa fa-dot-circle-o"></i> Total Votos</button> -->
                 </div>
             </div>
         </section>
@@ -54,9 +66,31 @@
                         <section class="list-candidatos-votacao" *ngFor="let c of candidatos">
                             <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
                             <div>{{c.nome}}</div>
-                            <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-hand-pointer-o"></i> Votar</button>
+                            <button (click)="votarCandidato(c)" type="button" class="btn btn-sm btn-danger">
+                                <i class="fa fa-hand-pointer-o"></i> Votar</button>
                         </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" (click)="concluirVotacao()" [class.disabled]="concluirVotacao" class="btn btn-sm btn-danger">
+                        <i class="fa fa-dot-circle-o"></i> Concluir Eleição</button>
+                </div>
+            </div>
+        </section>
 
+        <section *ngIf="votacaoConcluida" class="main-resultado-votacao">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Resultado Votação</strong>
+                </div>
+                <div class="card-block">
+                    <div *ngIf="candidatos.length>0" class="list-candidatos-wrapper-votacao">
+                        <section class="list-candidatos-resultado-votacao" *ngFor="let c of candidatos">
+                            <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
+                            <div>{{c.nome}}</div>
+                            <div>{{c.qtdVotosCandidato}}</div>
+                            <div>TOTAL de VOTOS: {{qtdVotosTotais}}</div>
+                        </section>
                     </div>
                 </div>
             </div>

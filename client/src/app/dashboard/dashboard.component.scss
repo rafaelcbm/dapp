@@ -100,3 +100,22 @@
         justify-self:center;
     }
 }
+
+.main-resultado-votacao{
+	display: grid;
+	grid-template-columns: 1fr;
+}
+
+.list-candidatos-resultado-votacao{
+    display: grid;
+    grid-template-columns: 2fr 8fr 2fr 2fr;
+    grid-gap: 0.5em;
+    align-items: center;
+    /*Font*/
+    font-size: 3em;
+    font-family: 'Work Sans', sans-serif;
+
+    .list-candidatos-votacao-numero{
+        justify-self:center;
+    }
+}

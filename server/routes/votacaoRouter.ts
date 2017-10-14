@@ -32,7 +32,6 @@ let code = fs.readFileSync(contractFile).toString();
 logger.info('code: ', code);
 let compiledCode = solc.compile(code);
 logger.info('compiledCode: ', compiledCode);
-
 let abiDefinition = JSON.parse(compiledCode.contracts[':Votacao'].interface)
 logger.info('abiDefinition: ', abiDefinition);
 let VotacaoContract = new web3.eth.Contract(abiDefinition);
@@ -41,13 +40,6 @@ let byteCode = compiledCode.contracts[':Votacao'].bytecode;
 //Correção de bug da ferramenta
 byteCode = '0x' + byteCode;
 logger.info('compiledCode com prefixo: ', byteCode);
-
-// logger.info('tx.gasprice: ', tx.gasprice);
-// logger.info('msg.gas: ', msg.gas);
-
-//TODO:Substituir
-//let deployedContract = VotacaoContract.new(['Rama','Nick','Jose'],{data: byteCode, from: web3.eth.accounts[0], gas: 4700000})
-//TODO: POR esse expmlo de https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#deploy
 
 let transactionHashContrato;
 let enderecoContrato;
