@@ -5,7 +5,20 @@
             <h2>Eleições na </h2>
             <h1 class="header-blockchain">Blockchain</h1>
         </header>
-        <section *ngIf="!cadastroVotacaoConcluida && !votacaoConcluida" class="main-cadastro-candidatos">
+
+        <button *ngIf="showBtnDeployContrato" type="button" (click)="criarContrato()" class="btn btn-sm btn-primary btn-criar-contrato">
+            <i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
+
+        <span *ngIf="contratoRegistrado" class="link-contrato">Endereço do contrato na Blockchain:
+            <a href="{{linkContrato}}">{{linkContrato}}</a>
+        </span>
+
+        <span *ngIf="contratoRegistrado" class="link-contrato">Registro do contrato:
+            <a href="{{registroContrato}}">{{registroContrato}}</a>
+        </span>
+
+
+        <section *ngIf="!cadastroVotacaoConcluida && !votacaoConcluida && !showBtnDeployContrato" class="main-cadastro-candidatos">
             <div class="card">
                 <div class="card-header">
                     <strong>Candidatos</strong>
@@ -29,29 +42,22 @@
 
                     <div *ngIf="candidatos.length>0" class="list-candidatos-wrapper">
                         <section class="list-candidatos" *ngFor="let c of candidatos">
-                            <div>{{c.numero}}</div>
+                            <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
                             <div>{{c.nome}}</div>
-                            <div>HASH DA TRANSACAO</div>
+                            <div>
+                                <span>Registro:
+                                    <a href="https://kovan.etherscan.io/tx/{{c.transactionHash}}">{{c.transactionHash}}</a>
+                                </span>
+                            </div>
                             <!-- <button (click)="deleteCandidato(c)" type="button" class="btn btn-sm btn-danger">
                                 <i class="fa fa-close"></i>
                             </button> -->
                         </section>
-
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="button" (click)="criarContrato()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
-                        <i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
-                    <button type="button" (click)="concluirCadastroVotacao()" [class.disabled]="concluirCadastroVotacao" class="btn btn-sm btn-danger">
+                    <button type="button" (click)="concluirCadastroVotacao()" class="btn btn-sm btn-danger">
                         <i class="fa fa-dot-circle-o"></i> Concluir Cadastro Candidatos</button>
-                    <!-- <button type="button" (click)="adicionarCandidato('rafael', 32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
-                        <i class="fa fa-dot-circle-o"></i> Adicionar Candidato</button>
-                    <button type="button" (click)="votarCandidato(32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
-                        <i class="fa fa-dot-circle-o"></i> Votar Candidato</button>
-                    <button type="button" (click)="obterQtdVotosCandidato(32)" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
-                        <i class="fa fa-dot-circle-o"></i> Total Votos Candidato</button>
-                    <button type="button" (click)="obterQtdVotosTotais()" [class.disabled]="cadastroVotacaoConcluida" class="btn btn-sm btn-danger">
-                        <i class="fa fa-dot-circle-o"></i> Total Votos</button> -->
                 </div>
             </div>
         </section>
@@ -68,12 +74,17 @@
                             <div>{{c.nome}}</div>
                             <button (click)="votarCandidato(c)" type="button" class="btn btn-sm btn-danger">
                                 <i class="fa fa-hand-pointer-o"></i> Votar</button>
+                            <div *ngIf="c.votacaoHash">
+                                <span>Registro:
+                                    <a href="https://kovan.etherscan.io/tx/{{c.votacaoHash}}">{{c.votacaoHash}}</a>
+                                </span>
+                            </div>
                         </section>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="button" (click)="concluirVotacao()" [class.disabled]="concluirVotacao" class="btn btn-sm btn-danger">
-                        <i class="fa fa-dot-circle-o"></i> Concluir Eleição</button>
+                    <button type="button" (click)="concluirVotacao()" class="btn btn-sm btn-danger">
+                        <i class="fa fa-dot-circle-o"></i> Concluir Votação</button>
                 </div>
             </div>
         </section>
@@ -89,8 +100,8 @@
                             <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
                             <div>{{c.nome}}</div>
                             <div>{{c.qtdVotosCandidato}}</div>
-                            <div>TOTAL de VOTOS: {{qtdVotosTotais}}</div>
                         </section>
+                        <div>TOTAL de VOTOS: {{qtdVotosTotais}}</div>
                     </div>
                 </div>
             </div>

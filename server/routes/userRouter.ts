@@ -75,7 +75,7 @@ userRouter.post("/deploy", function (request: Request, response: Response, next:
             //         console.log('estimateGas: ', gas);//  338688
             //     })
             .send({
-                from: '0x00d091E3b56518e1d34f218239da72907EB74f43',
+                from: '0x9b30905903cf2559db42c78e4fc6a128c1f02d37',
                 //gasPrice: '1000000',
                 gas: 338688//318984 // 338688 pro exemplo Nick, Rama, Jose - Mudar, tirando do construtor
             })
@@ -122,7 +122,7 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
     try {
 
         let VotingContract = new web3.eth.Contract(abiDefinition, '0xf0ab11C74A75bA22Bbc4Be254bCE28A1d4A24D1b');
-        VotingContract.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+        VotingContract.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0x9b30905903cf2559db42c78e4fc6a128c1f02d37' })
             .then(function (qtdVotos) {
                 console.log('qtdVotos: ', qtdVotos);
 
@@ -140,7 +140,7 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
         //     arguments: [[web3.utils.asciiToHex('Rama'), web3.utils.asciiToHex('Nick'), web3.utils.asciiToHex('Jose')]]
         // })
         //     .send({
-        //         from: '0x00d091E3b56518e1d34f218239da72907EB74f43',
+        //         from: '0x9b30905903cf2559db42c78e4fc6a128c1f02d37',
         //         //gasPrice: '1000000',
         //         gas: 338688
         //     })
@@ -157,16 +157,16 @@ userRouter.get('/deploy', function (request: Request, response: Response, next: 
         //         console.log('newContractInstance.options.address: ', newContractInstance.options.address); // instance with the new contract address
 
         //         // Votando
-        //         newContractInstance.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+        //         newContractInstance.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({ from: '0x9b30905903cf2559db42c78e4fc6a128c1f02d37' })
         //             .then(function (receipt) {
         //                 console.log('receipt: ', receipt);
         //                 console.log('receipt.transactionHash: ', receipt.transactionHash);
 
-        //                 newContractInstance.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+        //                 newContractInstance.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({ from: '0x9b30905903cf2559db42c78e4fc6a128c1f02d37' })
         //                     .then(function (receipt2) {
         //                         console.log('receipt2: ', receipt2);
 
-        //                         newContractInstance.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+        //                         newContractInstance.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call({ from: '0x9b30905903cf2559db42c78e4fc6a128c1f02d37' })
         //                             .then(function (qtdVotos) {
         //                                 console.log('qtdVotos: ', qtdVotos);
 

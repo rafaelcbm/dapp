@@ -1,21 +1,22 @@
 @import url('https://fonts.googleapis.com/css?family=Architects+Daughter');
 @import url('https://fonts.googleapis.com/css?family=Iceland');
 @import url('https://fonts.googleapis.com/css?family=Work+Sans:600');
-
-.header-eleicoes{
-    h1,h2{
+.header-eleicoes {
+    h1,
+    h2 {
         display: inline;
     }
-    h2{
+    h2 {
         font-size: 2em;
     }
-    font-family: 'Architects Daughter', cursive;
+    font-family: 'Architects Daughter',
+    cursive;
     text-align: center;
     margin-top: 2em;
     margin-bottom: 1em;
 }
 
-.header-blockchain{
+.header-blockchain {
     // font-family: 'Architects Daughter', cursive;
     font-family: 'Iceland', cursive;
     color: #5190bd;
@@ -23,99 +24,107 @@
     font-size: 3.5em;
 }
 
-.wrapper{
-	display: grid;
-	grid-template-columns: 1fr 6fr 1fr;
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 6fr 1fr;
 }
 
-.center{
-	display: grid;
-	grid-template-columns: 1fr;
+.center {
+    display: grid;
+    grid-template-columns: 1fr;
 }
 
-.main-cadastro-candidatos{
-	display: grid;
-	grid-template-columns: 1fr;
+.btn-criar-contrato {
+    font-size: 2em;
 }
 
-.frm-candidato{
+.link-contrato {
+    font-size: 1.5em;
+    justify-self: center;
+    margin: 0.5em 0;
+}
+
+.main-cadastro-candidatos {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.frm-candidato {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 5fr 1fr;
     grid-column-gap: 0.5em;
     align-items: end;
 }
 
-.lbl-Numero, .lbl-Nome{
+.lbl-Numero,
+.lbl-Nome {
     justify-self: end;
 }
 
-.list-candidatos-wrapper{
+.list-candidatos-wrapper {
     margin-top: 2em;
     padding: 1em;
-    background-color: gray;
     border-radius: 0.5em;
+    border: 2px solid rgb(80, 137, 155);
 }
 
-.list-candidatos{
-    margin-top: 1em;
+.list-candidatos {
     display: grid;
-    grid-template-columns: 1fr 10fr 1fr;
+    grid-template-columns: 1fr 4fr 4fr;
     grid-gap: 0.5em;
     align-items: center;
     /*Font*/
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.main-votacao{
-	display: grid;
-	grid-template-columns: 1fr;
+.main-votacao {
+    display: grid;
+    grid-template-columns: 1fr;
 }
 
-.card-footer{
+.card-footer {
     text-align: center;
 }
 
-.inputs-border{
+.inputs-border {
     border: 1px solid #d1d4d7;
 }
 
-.list-candidatos-wrapper-votacao{
+.list-candidatos-wrapper-votacao {
+    display: grid;
+    grid-row-gap: 1em;
     margin-top: 2em;
     padding: 1em;
     border-radius: 0.5em;
-    border: 2px solid gray;
+    border: 2px solid rgb(80, 137, 155);
 }
 
-.list-candidatos-votacao{
+.list-candidatos-votacao {
     display: grid;
-    grid-template-columns: 2fr 10fr 3fr;
+    grid-template-columns: 1fr 4fr 2fr 6fr;
+    grid-gap: 0.5em;
+    align-items: center;
+    /*Font*/
+    font-size: 1.1em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.main-resultado-votacao {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.list-candidatos-resultado-votacao {
+    display: grid;
+    grid-template-columns: 2fr 8fr 2fr;
     grid-gap: 0.5em;
     align-items: center;
     /*Font*/
     font-size: 3em;
     font-family: 'Work Sans', sans-serif;
-
-    .list-candidatos-votacao-numero{
-        justify-self:center;
-    }
 }
 
-.main-resultado-votacao{
-	display: grid;
-	grid-template-columns: 1fr;
-}
-
-.list-candidatos-resultado-votacao{
-    display: grid;
-    grid-template-columns: 2fr 8fr 2fr 2fr;
-    grid-gap: 0.5em;
-    align-items: center;
-    /*Font*/
-    font-size: 3em;
-    font-family: 'Work Sans', sans-serif;
-
-    .list-candidatos-votacao-numero{
-        justify-self:center;
-    }
+.list-candidatos-votacao-numero {
+    justify-self: center;
 }

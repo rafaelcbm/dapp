@@ -19,6 +19,10 @@ export class DashboardComponent implements OnInit {
 
     cadastroVotacaoConcluida = false;
     votacaoConcluida = false;
+    contratoRegistrado = false;
+    linkContrato = '';
+    registroContrato = '';
+    showBtnDeployContrato = true;
 
     users: any[];
 
@@ -38,9 +42,9 @@ export class DashboardComponent implements OnInit {
             // Use Mist/MetaMask's provider
             this.web3 = new Web3(this.windowRef.web3.currentProvider);
         } else {
-            console.warn("No web3 detected. Falling back to http://localhost:8549. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+            console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
             // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-            this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8549"));
+            this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         }
 
         this.mostrarContas();
@@ -57,7 +61,7 @@ export class DashboardComponent implements OnInit {
                 let VotacaoContract = new this.web3.eth.Contract(resposta.data.abi, resposta.data.enderecoContrato);
                 console.log('VotacaoContract: ', VotacaoContract);
 
-                VotacaoContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
+                VotacaoContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
                     .then(function (qtdVotos) {
                         console.log('qtdVotos: ', qtdVotos);
                     });
@@ -73,13 +77,10 @@ export class DashboardComponent implements OnInit {
                 this.contractAbi = resposta.data.abi;
                 this.contractAddress = resposta.data.enderecoContrato;
 
-                // let VotacaoContract = new this.web3.eth.Contract(resposta.data.abi, resposta.data.enderecoContrato);
-                // console.log('VotacaoContract: ', VotacaoContract);
-
-                // VotacaoContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
-                //     .then(function (qtdVotos) {
-                //         console.log('qtdVotos: ', qtdVotos);
-                //     });
+                this.contratoRegistrado = true;
+                this.linkContrato = `https://kovan.etherscan.io/address/${this.contractAddress}`;
+                this.registroContrato = `https://kovan.etherscan.io/tx/${resposta.data.transactionHashContrato}`;
+                this.showBtnDeployContrato = false;
             }
         );
     }
@@ -89,7 +90,7 @@ export class DashboardComponent implements OnInit {
         let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
         console.log('VotacaoContract: ', VotacaoContract);
 
-        VotacaoContract.methods.totalVotes().call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
+        VotacaoContract.methods.totalVotes().call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
             .then(function (qtdVotos) {
                 console.log('qtdVotos: ', qtdVotos);
             });
@@ -109,7 +110,7 @@ export class DashboardComponent implements OnInit {
         let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
         console.log('VotacaoContract: ', VotacaoContract);
 
-        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
+        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
             .then(function (qtdVotosCandidato) {
                 console.log('qtdVotosCandidato: ', qtdVotosCandidato);
             });
@@ -133,7 +134,7 @@ export class DashboardComponent implements OnInit {
             console.log('voto no candidato: ', candidato);
 
             let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
-            VotacaoContract.methods.voteForCandidate(candidato.numero).send({ from: '0xc2364e0b0897dc3029103d8bef8b003a55ce7e34' })
+            VotacaoContract.methods.voteForCandidate(candidato.numero).send({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
                 .on('transactionHash', function (hash) {
                     console.log('transactionHash: ', hash);
                 })
@@ -141,7 +142,8 @@ export class DashboardComponent implements OnInit {
                     console.log('confirmation: ', confirmationNumber);
                 })
                 .on('receipt', function (receipt) {
-                    console.log(receipt);
+                    console.log('receipt: ', receipt);
+                    candidato.votacaoHash = receipt.transactionHash;
                 })
                 .on('error', console.error);
         } catch (err) {
@@ -149,31 +151,72 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    adicionarCandidato(nomeCandidato, numeroCandidato) {
-        try {
-            console.log('nomeCandidato: ', nomeCandidato);
-            console.log('numeroCandidato: ', numeroCandidato);
+    addCandidato() {
+        const candidato = { nome: this.nomeCandidato, numero: this.numeroCandidato };
+        this.adicionarCandidato(candidato);
+    }
 
-            // using the event emitter            
-            console.log('this.contractAbi: ', this.contractAbi);
-            console.log('this.contractAddress: ', this.contractAddress);
+    adicionarCandidato(candidato) {
+        try {
+
+            console.log('candidato.nome: ', candidato.nome);
+            console.log('candidato.numero: ', candidato.numero);
+            let self = this;
 
             let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
-            VotacaoContract.methods.addCandidato(nomeCandidato, numeroCandidato)
-                .send({ from: '0xc2364e0b0897dc3029103d8bef8b003a55ce7e34' })
+            VotacaoContract.methods.addCandidato(candidato.nome, candidato.numero)
+                .send({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
                 .on('transactionHash', function (hash) {
                     console.log('transactionHash: ', hash);
                 })
                 .on('confirmation', function (confirmationNumber, receipt) {
-                    console.log('confirmation: ', confirmationNumber);
+                    //console.log('confirmation: ', confirmationNumber);
                 })
                 .on('receipt', function (receipt) {
-                    console.log(receipt);
+                    console.log('receipt: ', receipt);
+                    candidato.transactionHash = receipt.transactionHash;
+                    self.candidatos.push(candidato);
+                    console.log('this.candidatos - ', self.candidatos);
                 })
                 .on('error', console.error);
+
         } catch (err) {
             throw err;
         }
+    }
+
+    deleteCandidato(candidato) {
+
+        this.candidatos.splice(this.candidatos.findIndex((element, index, array) => element.nome === candidato.nome), 1);
+    }
+
+    concluirCadastroVotacao() {
+        this.cadastroVotacaoConcluida = true;
+    }
+
+    concluirVotacao() {
+
+        this.cadastroVotacaoConcluida = false;
+        this.votacaoConcluida = true;
+
+        let self = this;
+
+        this.candidatos.forEach(candidato => {
+
+            let VotacaoContract = new self.web3.eth.Contract(this.contractAbi, this.contractAddress);
+
+            VotacaoContract.methods.totalVotesFor(candidato.numero).call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+                .then(function (qtdVotosCandidato) {
+                    candidato.qtdVotosCandidato = qtdVotosCandidato;
+                    console.log(`Candidato: ${candidato.nome}, Votos: ${candidato.qtdVotosCandidato}`);
+                });
+
+            VotacaoContract.methods.totalVotes().call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+                .then(function (qtdVotosTotais) {
+                    console.log('qtdVotosTotais:', qtdVotosTotais);
+                    self.qtdVotosTotais = qtdVotosTotais;
+                });
+        });
     }
 
     mostrarContas() {
@@ -190,48 +233,6 @@ export class DashboardComponent implements OnInit {
                 alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
                 return;
             }
-        });
-    }
-
-    addCandidato() {
-        const candidato = { nome: this.nomeCandidato, numero: this.numeroCandidato };
-        console.log('cadidato - ', candidato)
-        this.candidatos.push(candidato);
-        console.log('this.candidatos - ', this.candidatos)
-
-        this.adicionarCandidato(candidato.nome, candidato.numero);
-    }
-
-    deleteCandidato(candidato) {
-
-        this.candidatos.splice(this.candidatos.findIndex((element, index, array) => element.nome === candidato.nome), 1);
-    }
-
-    concluirCadastroVotacao() {
-        this.cadastroVotacaoConcluida = true;
-    }
-
-    concluirVotacao() {        
-
-        this.votacaoConcluida = true;
-
-        let self = this;
-
-        this.candidatos.forEach(candidato => {
-
-            let VotacaoContract = new self.web3.eth.Contract(this.contractAbi, this.contractAddress);
-
-            VotacaoContract.methods.totalVotesFor(candidato.numero).call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
-                .then(function (qtdVotosCandidato) {
-                    candidato.qtdVotosCandidato = qtdVotosCandidato;
-                    console.log(`Candidato: ${candidato.nome}, Votos: ${candidato.qtdVotosCandidato}`);
-                });
-
-            VotacaoContract.methods.totalVotes().call({ from: '0xC2364E0b0897dC3029103D8BeF8b003A55Ce7E34' })
-                .then(function (qtdVotosTotais) {
-                    console.log('qtdVotosTotais:', qtdVotosTotais);
-                    self.qtdVotosTotais = qtdVotosTotais;
-                });
         });
     }
 }
