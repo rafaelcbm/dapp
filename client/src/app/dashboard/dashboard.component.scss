@@ -121,10 +121,25 @@
     grid-gap: 0.5em;
     align-items: center;
     /*Font*/
-    font-size: 3em;
-    font-family: 'Work Sans', sans-serif;
+    font-size: 2em;
+    font-family: 'Iceland', cursive;
+}
+.list-candidatos-resultado-votacao-cabecalho{
+    display: grid;
+    grid-template-columns: 2fr 8fr 2fr;
+    grid-gap: 0.5em;
+    align-items: center;
+    /*Font*/
+    font-size: 2em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #3e7ab9;
 }
 
 .list-candidatos-votacao-numero {
     justify-self: center;
+}
+
+.qtd-votos-totais {
+    font-size: 3em;
+    font-family: 'Iceland', cursive;
 }

@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit {
                 let VotacaoContract = new this.web3.eth.Contract(resposta.data.abi, resposta.data.enderecoContrato);
                 console.log('VotacaoContract: ', VotacaoContract);
 
-                VotacaoContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+                VotacaoContract.methods.totalVotesFor(this.web3.utils.asciiToHex('Rama')).call({ from: '0x22ce1f2e818e0a089be39f8052b91d78d6c6c99b' })
                     .then(function (qtdVotos) {
                         console.log('qtdVotos: ', qtdVotos);
                     });
@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
         let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
         console.log('VotacaoContract: ', VotacaoContract);
 
-        VotacaoContract.methods.totalVotes().call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+        VotacaoContract.methods.totalVotes().call({ from: '0x22ce1f2e818e0a089be39f8052b91d78d6c6c99b' })
             .then(function (qtdVotos) {
                 console.log('qtdVotos: ', qtdVotos);
             });
@@ -110,7 +110,7 @@ export class DashboardComponent implements OnInit {
         let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
         console.log('VotacaoContract: ', VotacaoContract);
 
-        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0x22ce1f2e818e0a089be39f8052b91d78d6c6c99b' })
             .then(function (qtdVotosCandidato) {
                 console.log('qtdVotosCandidato: ', qtdVotosCandidato);
             });
@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit {
             console.log('voto no candidato: ', candidato);
 
             let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
-            VotacaoContract.methods.voteForCandidate(candidato.numero).send({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+            VotacaoContract.methods.voteForCandidate(candidato.numero).send({ from: '0x22ce1f2e818e0a089be39f8052b91d78d6c6c99b' })
                 .on('transactionHash', function (hash) {
                     console.log('transactionHash: ', hash);
                 })
@@ -165,7 +165,7 @@ export class DashboardComponent implements OnInit {
 
             let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
             VotacaoContract.methods.addCandidato(candidato.nome, candidato.numero)
-                .send({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+                .send({ from: '0x22ce1f2e818e0a089be39f8052b91d78d6c6c99b' })
                 .on('transactionHash', function (hash) {
                     console.log('transactionHash: ', hash);
                 })
@@ -205,13 +205,13 @@ export class DashboardComponent implements OnInit {
 
             let VotacaoContract = new self.web3.eth.Contract(this.contractAbi, this.contractAddress);
 
-            VotacaoContract.methods.totalVotesFor(candidato.numero).call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+            VotacaoContract.methods.totalVotesFor(candidato.numero).call({ from: '0x22ce1f2e818e0a089be39f8052b91d78d6c6c99b' })
                 .then(function (qtdVotosCandidato) {
                     candidato.qtdVotosCandidato = qtdVotosCandidato;
                     console.log(`Candidato: ${candidato.nome}, Votos: ${candidato.qtdVotosCandidato}`);
                 });
 
-            VotacaoContract.methods.totalVotes().call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+            VotacaoContract.methods.totalVotes().call({ from: '0x22ce1f2e818e0a089be39f8052b91d78d6c6c99b' })
                 .then(function (qtdVotosTotais) {
                     console.log('qtdVotosTotais:', qtdVotosTotais);
                     self.qtdVotosTotais = qtdVotosTotais;
