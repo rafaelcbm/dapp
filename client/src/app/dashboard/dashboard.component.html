@@ -101,12 +101,12 @@
                         <section class="list-candidatos-resultado-votacao" *ngFor="let c of candidatos">
                             <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
                             <div>{{c.nome}}</div>
-                            <div>{{c.qtdVotosCandidato}}</div>
+                            <div class="list-candidatos-votacao-numero">{{c.qtdVotosCandidato}}</div>
                         </section>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <div class="qtd-votos-totais">TOTAL de VOTOS: {{qtdVotosTotais}}</div>
+                    <div class="qtd-votos-totais">Total de Votos: {{qtdVotosTotais}}</div>
                 </div>
             </div>
         </section>
