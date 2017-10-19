@@ -46,6 +46,17 @@ let enderecoContrato;
 
 VotacaoContract.options.data = byteCode;
 
+votacaoRouter.get("/contractData", function (request: Request, response: Response, next: NextFunction) {
+
+    response.json({
+        status: 'sucesso',
+        data: {
+            abi: abiDefinition,
+            contractData: byteCode
+        }
+    });
+});
+
 votacaoRouter.get("/deploy", function (request: Request, response: Response, next: NextFunction) {
 
     try {
@@ -55,7 +66,7 @@ votacaoRouter.get("/deploy", function (request: Request, response: Response, nex
             //         console.log('estimateGas: ', gas);//  338688
             //     });
             .send({
-                from: '0x926cc08e38f8c1d652dd903ee6f767720572e552',
+                from: '0x00d091E3b56518e1d34f218239da72907EB74f43',
                 gas: 323481
                 //gasPrice: '1000000',
             })
@@ -102,7 +113,7 @@ votacaoRouter.get('/votosTotais', function (request: Request, response: Response
 
     try {
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
-        VotacaoContract.methods.totalVotes().call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+        VotacaoContract.methods.totalVotes().call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .then(function (qtdVotos) {
                 console.log('qtdVotos: ', qtdVotos);
 
@@ -127,7 +138,7 @@ votacaoRouter.get('/votosCandidato/:numeroCandidato', function (request: Request
         console.log('numeroCandidato: ', numeroCandidato);
 
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
-        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .then(function (qtdVotosCandidato) {
                 console.log('qtdVotosCandidato: ', qtdVotosCandidato);
                 response.json({
@@ -155,7 +166,7 @@ votacaoRouter.get('/votar/:numeroCandidato', function (request: Request, respons
 
         // using the event emitter
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
-        VotacaoContract.methods.voteForCandidate(numeroCandidato).send({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+        VotacaoContract.methods.voteForCandidate(numeroCandidato).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .on('transactionHash', function (hash) {
                 console.log('transactionHash: ', hash);
             })
@@ -189,11 +200,11 @@ votacaoRouter.get('/adicionarCandidato/:nomeCandidato/:numeroCandidato', functio
         // using the event emitter
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
         VotacaoContract.methods.addCandidato(nomeCandidato, numeroCandidato)
-            // .estimateGas({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' }, function (error, gasAmount) {
+            // .estimateGas({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' }, function (error, gasAmount) {
             //     console.log('error', error);
             //     console.log('gasAmount', gasAmount);
             // });
-            .send({ from: '0x926cc08e38f8c1d652dd903ee6f767720572e552' })
+            .send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .on('transactionHash', function (hash) {
                 console.log('transactionHash: ', hash);
             })
