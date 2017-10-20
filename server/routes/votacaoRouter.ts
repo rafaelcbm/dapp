@@ -200,11 +200,7 @@ votacaoRouter.get('/adicionarCandidato/:nomeCandidato/:numeroCandidato', functio
         // using the event emitter
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
         VotacaoContract.methods.addCandidato(nomeCandidato, numeroCandidato)
-            // .estimateGas({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' }, function (error, gasAmount) {
-            //     console.log('error', error);
-            //     console.log('gasAmount', gasAmount);
-            // });
-            .send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+            // .estimateGas({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .on('transactionHash', function (hash) {
                 console.log('transactionHash: ', hash);
             })
