@@ -1,3 +1,4 @@
+import { EventsService } from './eventsService.service';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -33,7 +34,7 @@ export class DashboardComponent implements OnInit {
 
     qtdVotosTotais = 0;
 
-    constructor(private http: HttpClient, private ref: ChangeDetectorRef) { }
+    constructor(private http: HttpClient, private ref: ChangeDetectorRef, private eventsService: EventsService) { }
 
     ngOnInit(): void {
         this.windowRef = window;
@@ -49,6 +50,14 @@ export class DashboardComponent implements OnInit {
         }
 
         this.mostrarContas();
+    }
+
+    showProgressBar() {
+        this.eventsService.showProgressBar();
+    }
+
+    hideProgressBar() {
+        this.eventsService.hideProgressBar();
     }
 
     chamarContrato() {
@@ -71,73 +80,89 @@ export class DashboardComponent implements OnInit {
     }
 
     criarContrato() {
-        this.http.get('/api/votacao/deploy').subscribe(
-            (resposta: any) => {
-                console.log('resposta deploy: ', resposta);
 
-                this.contractAbi = resposta.data.abi;
-                this.contractAddress = resposta.data.enderecoContrato;
+        try {
+            this.showProgressBar();
 
-                this.contratoRegistrado = true;
-                this.linkContrato = `https://kovan.etherscan.io/address/${this.contractAddress}`;
-                this.registroContrato = `https://kovan.etherscan.io/tx/${resposta.data.transactionHashContrato}`;
-                this.showBtnDeployContrato = false;
-            }
-        );
+            this.http.get('/api/votacao/deploy').subscribe(
+                (resposta: any) => {
+                    console.log('resposta deploy: ', resposta);
+
+                    this.contractAbi = resposta.data.abi;
+                    this.contractAddress = resposta.data.enderecoContrato;
+
+                    this.contratoRegistrado = true;
+                    this.linkContrato = `https://kovan.etherscan.io/address/${this.contractAddress}`;
+                    this.registroContrato = `https://kovan.etherscan.io/tx/${resposta.data.transactionHashContrato}`;
+                    this.showBtnDeployContrato = false;
+                    this.hideProgressBar();
+                }
+            );
+        } catch (e) {
+            this.hideProgressBar();
+        }
     }
 
     criarContratoLocal() {
 
+        try {
 
-        let self = this;
-        let transactionHashContrato: any;
-        let defaultAccount: any;
+            let self = this;
+            let transactionHashContrato: any;
+            let defaultAccount: any;
 
-        this.web3.eth.getAccounts((err, accs) => {
-            defaultAccount = accs[0];
+            this.showProgressBar();
 
-            this.http.get('/api/votacao/contractData').subscribe(
-                (resposta: any) => {
-                    console.log('resposta contractData: ', resposta);
+            this.web3.eth.getAccounts((err, accs) => {
+                defaultAccount = accs[0];
 
-                    this.contractAbi = resposta.data.abi;
-                    this.contractData = resposta.data.contractData;
+                this.http.get('/api/votacao/contractData').subscribe(
+                    (resposta: any) => {
+                        console.log('resposta contractData: ', resposta);
 
-                    let VotacaoContract = new this.web3.eth.Contract(this.contractAbi);
-                    VotacaoContract.options.data = this.contractData;
+                        this.contractAbi = resposta.data.abi;
+                        this.contractData = resposta.data.contractData;
 
-                    VotacaoContract.deploy()
-                        // .estimateGas(function (err, gas) {
-                        //         console.log('estimateGas: ', gas);//  338688
-                        //     });
-                        .send({
-                            //from: '0x00d091E3b56518e1d34f218239da72907EB74f43',
-                            from: defaultAccount,
-                            //gas: 323481
-                            //gasPrice: '1000000',
-                        })
-                        // .on('error', function (error) {
-                        //     console.log('Erro ao fazer o deploy do contrato.')
-                        //     throw error;
-                        // })
-                        .on('transactionHash', function (transactionHash) {
-                            console.log('Contrato Criado - transactionHash: ', transactionHash);
-                            transactionHashContrato = transactionHash;
-                        })
-                        .then(contractInstance => {
-                            console.log('contractInstance.options.address: ', contractInstance.options.address); // instance with the new contract address
-                            this.contractAddress = contractInstance.options.address;
+                        let VotacaoContract = new this.web3.eth.Contract(this.contractAbi);
+                        VotacaoContract.options.data = this.contractData;
 
-                            this.contratoRegistrado = true;
-                            this.linkContrato = `https://kovan.etherscan.io/address/${this.contractAddress}`;
-                            this.registroContrato = `https://kovan.etherscan.io/tx/${transactionHashContrato}`;
-                            this.showBtnDeployContrato = false;
+                        VotacaoContract.deploy()
+                            // .estimateGas(function (err, gas) {
+                            //         console.log('estimateGas: ', gas);//  338688
+                            //     });
+                            .send({
+                                //from: '0x00d091E3b56518e1d34f218239da72907EB74f43',
+                                from: defaultAccount,
+                                //gas: 323481
+                                //gasPrice: '1000000',
+                            })
+                            // .on('error', function (error) {
+                            //     console.log('Erro ao fazer o deploy do contrato.')
+                            //     throw error;
+                            // })
+                            .on('transactionHash', function (transactionHash) {
+                                console.log('Contrato Criado - transactionHash: ', transactionHash);
+                                transactionHashContrato = transactionHash;
+                            })
+                            .then(contractInstance => {
+                                console.log('contractInstance.options.address: ', contractInstance.options.address); // instance with the new contract address
+                                this.contractAddress = contractInstance.options.address;
 
-                            this.ref.detectChanges();
-                        });
-                }
-            );
-        });
+                                this.contratoRegistrado = true;
+                                this.linkContrato = `https://kovan.etherscan.io/address/${this.contractAddress}`;
+                                this.registroContrato = `https://kovan.etherscan.io/tx/${transactionHashContrato}`;
+                                this.showBtnDeployContrato = false;
+
+                                this.hideProgressBar();
+
+                                this.ref.detectChanges();
+                            });
+                    }
+                );
+            });
+        } catch (e) {
+            this.hideProgressBar();
+        }
     }
 
     obterQtdVotosTotais() {
@@ -188,6 +213,8 @@ export class DashboardComponent implements OnInit {
         try {
             console.log('voto no candidato: ', candidato);
 
+            this.showProgressBar();
+
             let defaultAccount: any;
 
             this.web3.eth.getAccounts((err, accs) => {
@@ -205,10 +232,13 @@ export class DashboardComponent implements OnInit {
                     .on('receipt', receipt => {
                         console.log('receipt: ', receipt);
                         candidato.votacaoHash = receipt.transactionHash;
+
+                        this.hideProgressBar();
                     })
                     .on('error', console.error);
             });
         } catch (err) {
+            this.hideProgressBar();
             throw err;
         }
     }
@@ -220,6 +250,9 @@ export class DashboardComponent implements OnInit {
 
     adicionarCandidato(candidato) {
         try {
+
+            this.showProgressBar();
+
             //let self = this;
             let defaultAccount: any;
 
@@ -240,10 +273,13 @@ export class DashboardComponent implements OnInit {
                         candidato.transactionHash = receipt.transactionHash;
                         this.candidatos.push(candidato);
                         console.log('this.candidatos - ', this.candidatos);
+
+                        this.hideProgressBar();
                     })
                     .on('error', console.error);
             });
         } catch (err) {
+            this.hideProgressBar();
             throw err;
         }
     }

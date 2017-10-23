@@ -1,3 +1,4 @@
+import { EventsService } from './dashboard/eventsService.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -19,25 +20,28 @@ import { AppRoutingModule } from './app.routing';
 import { FullLayoutComponent } from './layouts/full-layout.component';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BsDropdownModule.forRoot(),
-    TabsModule.forRoot(),
-    ChartsModule
-  ],
-  declarations: [
-    AppComponent,
-    FullLayoutComponent,
-    NAV_DROPDOWN_DIRECTIVES,
-    BreadcrumbsComponent,
-    SIDEBAR_TOGGLE_DIRECTIVES,
-    AsideToggleDirective
-  ],
-//   providers: [{
-//     provide: LocationStrategy,
-//     useClass: HashLocationStrategy
-//   }],
-  bootstrap: [ AppComponent ]
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BsDropdownModule.forRoot(),
+        TabsModule.forRoot(),
+        ChartsModule
+    ],
+    declarations: [
+        AppComponent,
+        FullLayoutComponent,
+        NAV_DROPDOWN_DIRECTIVES,
+        BreadcrumbsComponent,
+        SIDEBAR_TOGGLE_DIRECTIVES,
+        AsideToggleDirective
+    ],
+    //   providers: [{
+    //     provide: LocationStrategy,
+    //     useClass: HashLocationStrategy
+    //   }],
+    providers: [
+        EventsService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
