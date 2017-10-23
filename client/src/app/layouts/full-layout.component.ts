@@ -1,23 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './full-layout.component.html'
+    selector: 'app-dashboard',
+    templateUrl: './full-layout.component.html',
+    styleUrls: ['./full-layout.component.scss']
 })
 export class FullLayoutComponent implements OnInit {
 
-  public disabled = false;
-  public status: {isopen: boolean} = {isopen: false};
+    public disabled = false;
+    public status: { isopen: boolean } = { isopen: false };
 
-  public toggled(open: boolean): void {
-    console.log('Dropdown is now: ', open);
-  }
+    public progressBarVisible = false;
 
-  public toggleDropdown($event: MouseEvent): void {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.status.isopen = !this.status.isopen;
-  }
+    public toggled(open: boolean): void {
+        console.log('Dropdown is now: ', open);
+    }
 
-  ngOnInit(): void {}
+    public toggleDropdown($event: MouseEvent): void {
+        $event.preventDefault();
+        $event.stopPropagation();
+        this.status.isopen = !this.status.isopen;
+    }
+
+    ngOnInit(): void { }
+
+    showProgressBar() {
+        this.progressBarVisible = !this.progressBarVisible;
+    }
+
 }

@@ -123,7 +123,8 @@
     /*Font*/
     font-size: 2em;
 }
-.list-candidatos-resultado-votacao-cabecalho{
+
+.list-candidatos-resultado-votacao-cabecalho {
     display: grid;
     grid-template-columns: 2fr 8fr 2fr;
     grid-gap: 0.5em;
@@ -144,17 +145,3 @@
 }
 
 
-/* Inicio
-.load {
-    display: inline-block;
-    width: $navbar-brand-width;
-    height: $navbar-height;
-    padding: $navbar-padding-y $navbar-padding-x;
-    margin-right: 0;
-    background-color: $navbar-brand-bg;
-    background-image: url('../img/blockchain-logo.png') !default;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 70px auto !default;
-  }
-*/

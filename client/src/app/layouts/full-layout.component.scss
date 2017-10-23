@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Architects+Daughter');
+.header-fix {
+    justify-content: flex-start;
+}
+
+.load-wrapper {
+    display: grid;
+    grid-template-columns: 8fr 1fr 8fr;
+}
+
+.load-label {
+    justify-self: end;
+    align-self: center;
+    font-family: 'Architects Daughter', cursive;
+}
+
+
+.load-image {
+    display: inline-block;
+    width: 100px;
+    height: 70px;
+    /*padding: $navbar-padding-y $navbar-padding-x;*/
+    margin-right: 0; //background-color: $navbar-brand-bg;
+    background-image: url('../../img/load-blockchain.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 70px auto;
+}

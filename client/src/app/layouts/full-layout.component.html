@@ -1,28 +1,45 @@
-<header class="app-header navbar">
-  <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>&#9776;</button>
-  <a class="navbar-brand" href="#"></a>
+<header class="app-header navbar header-fix">
+    <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>&#9776;</button>
+    <a class="navbar-brand" href=""></a>
+
+    <div *ngIf="progressBarVisible" class="load-wrapper">
+        <div class=" load-label">Esperando operação na Blockchain...</div>
+        <div _ngcontent-c0="" class="load-image"></div>
+        <div>
+        </div>
+    </div>
 </header>
 
 <div class="app-body">
-  <div class="sidebar">
-    <nav class="sidebar-nav">
-      <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="icon-speedometer"></i> Dashboard <span class="badge badge-info">NEW</span></a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']">
+                        <i class="icon-speedometer"></i> Dashboard
+                        <span class="badge badge-info">NEW</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 
-  <!-- Main content -->
-  <main class="main">
-    <div class="container-fluid">
-      <router-outlet></router-outlet>
-    </div><!-- /.conainer-fluid -->
-  </main>
+    <!-- Main content -->
+    <main class="main">
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
+        </div>
+        <!-- /.conainer-fluid -->
+    </main>
 </div>
 
 <footer class="app-footer">
-  <a href="#">Blockchain Decentralized Application</a>
-  <span class="float-right"><a href="#">Samantha Kelly Soares de Almeida</a></span>
+    <a href="#">Blockchain Decentralized Application</a>
+
+    <button type="button" (click)="showProgressBar()" class="btn btn-sm btn-primary btn-criar-contrato">
+            <i class="fa fa-dot-circle-o"></i> Toogle ProgressBAR</button>
+
+    <span class="float-right">
+        <a href="#">Samantha Kelly Soares de Almeida</a>
+    </span>
 </footer>

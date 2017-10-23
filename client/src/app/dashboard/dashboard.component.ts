@@ -298,15 +298,14 @@ export class DashboardComponent implements OnInit {
     mostrarContas() {
         this.web3.eth.getAccounts((err, accs) => {
             if (err != null) {
-                alert("Erro ao buscar contas.");
+                console.log("Erro ao buscar contas.");
                 return;
             }
 
             console.log("*** accs: ", accs);
 
-            // Get the initial account balance so it can be displayed.
             if (accs.length == 0) {
-                alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
+                console.log("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
                 return;
             }
         });
