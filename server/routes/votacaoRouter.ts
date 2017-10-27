@@ -3,31 +3,18 @@ import { join } from 'path';
 import { Router, Request, Response, NextFunction } from 'express';
 import * as logger from 'logops';
 var Web3 = require('web3');
-//import { default as Web3 } from 'web3';
-//import { default as Web3 } from 'web3';
-//import { default as solc } from 'solc';
 var solc = require('solc');
-//import { default as solc } from 'solc';
-// import { default as Web3 } from 'web3';
-// import { default as solc } from 'solc';
 
 export const votacaoRouter: Router = Router();
 
-//let provider = new Web3.providers.HttpProvider("http://localhost:8545");
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-// logger.info('provider: ', provider);
-// let web3 = new Web3(provider);
+
 logger.info('web3: ', web3);
-
-//let web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-
 logger.info('accounts: ');
 web3.eth.getAccounts().then(console.log);
-
 let contractFile = join(__dirname, '../../../contracts/Votacao.sol');
 logger.info('contractFile: ', contractFile);
 
-//let code = fs.readFileSync('Votacao.sol').toString();
 let code = fs.readFileSync(contractFile).toString();
 logger.info('code: ', code);
 let compiledCode = solc.compile(code);
@@ -37,7 +24,6 @@ logger.info('abiDefinition: ', abiDefinition);
 let VotacaoContract = new web3.eth.Contract(abiDefinition);
 logger.info('VotacaoContract: ', VotacaoContract);
 let byteCode = compiledCode.contracts[':Votacao'].bytecode;
-//Correção de bug da ferramenta
 byteCode = '0x' + byteCode;
 logger.info('compiledCode com prefixo: ', byteCode);
 
@@ -62,13 +48,9 @@ votacaoRouter.get("/deploy", function (request: Request, response: Response, nex
     try {
 
         VotacaoContract.deploy()
-            // .estimateGas(function (err, gas) {
-            //         console.log('estimateGas: ', gas);//  338688
-            //     });
             .send({
                 from: '0x00d091E3b56518e1d34f218239da72907EB74f43',
                 gas: 323481
-                //gasPrice: '1000000',
             })
             .on('error', function (error) {
                 console.log('Erro ao fazer o deploy do contrato.')
@@ -80,7 +62,7 @@ votacaoRouter.get("/deploy", function (request: Request, response: Response, nex
             })
             .then(function (contractInstance) {
                 console.log('contractInstance.options: ', contractInstance.options);
-                console.log('contractInstance.options.address: ', contractInstance.options.address); // instance with the new contract address
+                console.log('contractInstance.options.address: ', contractInstance.options.address);
 
                 enderecoContrato = contractInstance.options.address;
 
@@ -93,17 +75,7 @@ votacaoRouter.get("/deploy", function (request: Request, response: Response, nex
                         enderecoContrato: contractInstance.options.address
                     }
                 });
-
             });
-
-        // Gas estimation
-        // .estimateGas(function (err, gas) {
-        //     console.log('estimateGas: ', gas); - 338688
-        // })
-        // logger.info('deployedContract: ', deployedContract);
-        // logger.info('deployedContract.address: ', deployedContract.address);
-        // let contractInstance = VotacaoContract.at(deployedContract.address)
-        // logger.info('contractInstance: ', contractInstance);
     } catch (err) {
         throw err;
     }
@@ -158,13 +130,7 @@ votacaoRouter.get('/votar/:numeroCandidato', function (request: Request, respons
     try {
         let numeroCandidato = request.params.numeroCandidato;
         console.log('numeroCandidato: ', numeroCandidato);
-        // using the promise
-        // myContract.methods.myMethod(123).send({ from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' })
-        //     .then(function (receipt) {
-        //         // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
-        //     });
 
-        // using the event emitter
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
         VotacaoContract.methods.voteForCandidate(numeroCandidato).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .on('transactionHash', function (hash) {
@@ -188,7 +154,6 @@ votacaoRouter.get('/votar/:numeroCandidato', function (request: Request, respons
     }
 });
 
-// 74162 gas usados, se precisar
 votacaoRouter.get('/adicionarCandidato/:nomeCandidato/:numeroCandidato', function (request: Request, response: Response, next: NextFunction) {
 
     try {
@@ -197,10 +162,8 @@ votacaoRouter.get('/adicionarCandidato/:nomeCandidato/:numeroCandidato', functio
         let numeroCandidato = request.params.numeroCandidato;
         console.log('numeroCandidato: ', numeroCandidato);
 
-        // using the event emitter
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
         VotacaoContract.methods.addCandidato(nomeCandidato, numeroCandidato)
-            // .estimateGas({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .on('transactionHash', function (hash) {
                 console.log('transactionHash: ', hash);
             })
