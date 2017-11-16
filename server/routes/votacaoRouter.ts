@@ -85,7 +85,7 @@ votacaoRouter.get('/votosTotais', function (request: Request, response: Response
 
     try {
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
-        VotacaoContract.methods.totalVotes().call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+        VotacaoContract.methods.totalVotos().call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .then(function (qtdVotos) {
                 console.log('qtdVotos: ', qtdVotos);
 
@@ -110,7 +110,7 @@ votacaoRouter.get('/votosCandidato/:numeroCandidato', function (request: Request
         console.log('numeroCandidato: ', numeroCandidato);
 
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
-        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+        VotacaoContract.methods.totalVotosCandidato(numeroCandidato).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .then(function (qtdVotosCandidato) {
                 console.log('qtdVotosCandidato: ', qtdVotosCandidato);
                 response.json({
@@ -132,7 +132,7 @@ votacaoRouter.get('/votar/:numeroCandidato', function (request: Request, respons
         console.log('numeroCandidato: ', numeroCandidato);
 
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
-        VotacaoContract.methods.voteForCandidate(numeroCandidato).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+        VotacaoContract.methods.votarParaCandidato(numeroCandidato).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .on('transactionHash', function (hash) {
                 console.log('transactionHash: ', hash);
             })
@@ -163,7 +163,7 @@ votacaoRouter.get('/adicionarCandidato/:nomeCandidato/:numeroCandidato', functio
         console.log('numeroCandidato: ', numeroCandidato);
 
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
-        VotacaoContract.methods.addCandidato(nomeCandidato, numeroCandidato)
+        VotacaoContract.methods.adicionarCandidato(nomeCandidato, numeroCandidato)
             .on('transactionHash', function (hash) {
                 console.log('transactionHash: ', hash);
             })

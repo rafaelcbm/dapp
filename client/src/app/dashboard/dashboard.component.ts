@@ -146,7 +146,7 @@ export class DashboardComponent implements OnInit {
         let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
         console.log('VotacaoContract: ', VotacaoContract);
 
-        VotacaoContract.methods.totalVotesFor(numeroCandidato).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
+        VotacaoContract.methods.totalVotosCandidato(numeroCandidato).call({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .then(function (qtdVotosCandidato) {
                 console.log('qtdVotosCandidato: ', qtdVotosCandidato);
             });
@@ -166,7 +166,7 @@ export class DashboardComponent implements OnInit {
                 defaultAccount = accs[0];
 
                 let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
-                VotacaoContract.methods.voteForCandidate(candidato.numero).send(
+                VotacaoContract.methods.votarParaCandidato(candidato.numero).send(
                     { from: defaultAccount })
                     .on('transactionHash', function (hash) {
                         console.log('transactionHash: ', hash);
@@ -201,7 +201,7 @@ export class DashboardComponent implements OnInit {
                 defaultAccount = accs[0];
 
                 let VotacaoContract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress);
-                VotacaoContract.methods.addCandidato(candidato.nome, candidato.numero)
+                VotacaoContract.methods.adicionarCandidato(candidato.nome, candidato.numero)
                     .send({ from: defaultAccount })
                     .on('transactionHash', function (hash) {
                         console.log('transactionHash: ', hash);
@@ -241,7 +241,7 @@ export class DashboardComponent implements OnInit {
             this.web3.eth.getAccounts((err, accs) => {
                 defaultAccount = accs[0];
 
-                VotacaoContract.methods.totalVotesFor(candidato.numero).call({ from: defaultAccount })
+                VotacaoContract.methods.totalVotosCandidato(candidato.numero).call({ from: defaultAccount })
                     .then(qtdVotosCandidato => {
                         candidato.qtdVotosCandidato = qtdVotosCandidato;
                         console.log(`Candidato: ${candidato.nome}, Votos: ${candidato.qtdVotosCandidato}`);
@@ -253,7 +253,7 @@ export class DashboardComponent implements OnInit {
         this.web3.eth.getAccounts((err, accs) => {
             defaultAccount = accs[0];
 
-            VotacaoContract.methods.totalVotes().call({ from: defaultAccount })
+            VotacaoContract.methods.totalVotos().call({ from: defaultAccount })
                 .then(qtdVotosTotais => {
                     console.log('qtdVotosTotais:', qtdVotosTotais);
                     this.qtdVotosTotais = qtdVotosTotais;

@@ -1,41 +1,36 @@
 pragma solidity ^0.4.15;
-// We have to specify what version of compiler this code will compile with
 
 contract Votacao {
 
-    struct  infoCandidato 
+    struct infoCandidato
     {
-      string inomeCandidato;
-      uint16 inumeroCandidato;
-      uint iqtdVotos;
+        string inomeCandidato;
+        uint16 inumeroCandidato;
+        uint iqtdVotos;
     }
-  
-  mapping (uint16 => infoCandidato) votosRecebidos;
-  uint qtdVotos;
 
-  function Votacao() public {
-    qtdVotos = 0;
-  }
+    mapping (uint16 => infoCandidato) votosRecebidos;
+    uint qtdVotos;
 
-  function addCandidato(string nomeCandidato, uint16 numeroCandidato) public {
-    //TODO: Fazer validacoes depois
-    //if (validCandidate(candidate) == false)  returns (bool);
+    function Votacao() public {
+        qtdVotos = 0;
+    }
 
-    var novoCandidato = infoCandidato(nomeCandidato, numeroCandidato, 0);
-    votosRecebidos[numeroCandidato] = novoCandidato;
-  }
-  
-  function totalVotesFor(uint16 numeroCandidato) public constant returns (uint) {      
-    return votosRecebidos[numeroCandidato].iqtdVotos;
-  }
+    function adicionarCandidato(string nomeCandidato, uint16 numeroCandidato) public {
+        var novoCandidato = infoCandidato(nomeCandidato, numeroCandidato, 0);
+        votosRecebidos[numeroCandidato] = novoCandidato;
+    }
 
-   function totalVotes() public constant returns (uint) {    
-    return qtdVotos;
-  }
+    function totalVotosCandidato(uint16 numeroCandidato) public constant returns (uint) {
+        return votosRecebidos[numeroCandidato].iqtdVotos;
+    }
 
-  function voteForCandidate(uint16 numeroCandidato) public {
-    //if (validCandidate(candidate) == false) return false;
-    votosRecebidos[numeroCandidato].iqtdVotos += 1;
-    qtdVotos++;
-  }
+    function totalVotos() public constant returns (uint) {
+        return qtdVotos;
+    }
+
+    function votarParaCandidato(uint16 numeroCandidato) public {
+        votosRecebidos[numeroCandidato].iqtdVotos += 1;
+        qtdVotos++;
+    }
 }
