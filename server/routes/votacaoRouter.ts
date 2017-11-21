@@ -163,7 +163,7 @@ votacaoRouter.get('/adicionarCandidato/:nomeCandidato/:numeroCandidato', functio
         console.log('numeroCandidato: ', numeroCandidato);
 
         let VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
-        VotacaoContract.methods.adicionarCandidato(nomeCandidato, numeroCandidato)
+        VotacaoContract.methods.adicionarCandidato(nomeCandidato, numeroCandidato).send({ from: '0x00d091E3b56518e1d34f218239da72907EB74f43' })
             .on('transactionHash', function (hash) {
                 console.log('transactionHash: ', hash);
             })
