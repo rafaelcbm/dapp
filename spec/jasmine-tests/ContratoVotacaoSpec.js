@@ -1,3 +1,4 @@
+
 describe("Contrato", function () {
 
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
@@ -36,13 +37,10 @@ describe("Contrato", function () {
                 throw error;
             })
             .on('transactionHash', function (transactionHash) {
-                console.log('Criação Contrato - transactionHash: ', transactionHash);
+                console.log('Criação Contrato - Hash da Transação: ', transactionHash);
                 transactionHashContrato = transactionHash;
             })
             .then(function (contractInstance) {
-                //console.log('contractInstance.options: ', contractInstance.options);
-                //console.log('contractInstance.options.address: ', contractInstance.options.address);
-
                 enderecoContrato = contractInstance.options.address;
                 VotacaoContract = new web3.eth.Contract(abiDefinition, enderecoContrato);
 
@@ -59,10 +57,10 @@ describe("Contrato", function () {
 
     it("deve ser capaz de adicionar candidatos", function (done) {
 
-        VotacaoContract.methods.adicionarCandidato('Rafael', 12)
+        VotacaoContract.methods.adicionarCandidato('João', 12)
             .send({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .on('transactionHash', function (hash) {
-                console.log('transactionHash adicionarCandidato: ', hash);
+                console.log('Candidato Adicionado João - No:12 - Hash da Transação: ', hash);
             })
             .on('receipt', function (receipt) {
                 expect(receipt).toBeTruthy();
@@ -70,10 +68,10 @@ describe("Contrato", function () {
             })
             .on('error', console.error);
 
-        VotacaoContract.methods.adicionarCandidato('Samantha', 31)
+        VotacaoContract.methods.adicionarCandidato('Maria', 31)
             .send({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .on('transactionHash', function (hash) {
-                console.log('transactionHash adicionarCandidato: ', hash);
+                console.log('Candidato Adicionado Maria - No:31 - Hash da Transação: ', hash);
             })
             .on('receipt', function (receipt) {
                 expect(receipt).toBeTruthy();
@@ -92,7 +90,7 @@ describe("Contrato", function () {
 
         VotacaoContract.methods.votarParaCandidato(12).send({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .on('transactionHash', function (hash) {
-                console.log('transactionHash votarParaCandidato: ', hash);
+                console.log('Voto para Candidato João - No:12 - Hash da Transação: ', hash);
             })
             .on('receipt', function (receipt) {
                 expect(receipt).toBeTruthy();
@@ -102,7 +100,7 @@ describe("Contrato", function () {
 
         VotacaoContract.methods.votarParaCandidato(12).send({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .on('transactionHash', function (hash) {
-                console.log('transactionHash votarParaCandidato: ', hash);
+                console.log('Voto para Candidato João - No:12 - Hash da Transação: ', hash);
             })
             .on('receipt', function (receipt) {
                 expect(receipt).toBeTruthy();
@@ -112,7 +110,7 @@ describe("Contrato", function () {
 
         VotacaoContract.methods.votarParaCandidato(31).send({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .on('transactionHash', function (hash) {
-                console.log('transactionHash votarParaCandidato: ', hash);
+                console.log('Voto para Candidato Maria - No:31 - Hash da Transação: ', hash);
             })
             .on('receipt', function (receipt) {
                 expect(receipt).toBeTruthy();
@@ -122,7 +120,7 @@ describe("Contrato", function () {
 
         VotacaoContract.methods.votarParaCandidato(31).send({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .on('transactionHash', function (hash) {
-                console.log('transactionHash votarParaCandidato: ', hash);
+                console.log('Voto para Candidato Maria - No:31 - Hash da Transação: ', hash);
             })
             .on('receipt', function (receipt) {
                 expect(receipt).toBeTruthy();
@@ -132,7 +130,7 @@ describe("Contrato", function () {
 
         VotacaoContract.methods.votarParaCandidato(31).send({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .on('transactionHash', function (hash) {
-                console.log('transactionHash votarParaCandidato: ', hash);
+                console.log('Voto para Candidato Maria - No:31 - Hash da Transação: ', hash);
             })
             .on('receipt', function (receipt) {
                 expect(receipt).toBeTruthy();
@@ -150,13 +148,27 @@ describe("Contrato", function () {
 
         VotacaoContract.methods.totalVotosCandidato(12).call({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .then(function (qtdVotosCandidato) {
-                console.log('qtdVotosCandidato: ', qtdVotosCandidato);
+                console.log('Quantidade Votos para Candidato: João - No:12: ', qtdVotosCandidato);
                 expect(qtdVotosCandidato).toEqual('2');
             });
 
         VotacaoContract.methods.totalVotosCandidato(31).call({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
             .then(function (qtdVotosCandidato) {
-                console.log('qtdVotosCandidato: ', qtdVotosCandidato);
+                console.log('Quantidade Votos para Candidato: Maria - No:31: ', qtdVotosCandidato);
+                expect(qtdVotosCandidato).toEqual('7');
+            });
+
+        setTimeout(() => {
+            console.log('*** Contagem de Votos dos Candidatos Concluída !');
+            done();
+        }, 2000);
+    });
+
+    it("deve ser capaz de contar todos os votos", function (done) {
+
+        VotacaoContract.methods.totalVotos().call({ from: '0x58CdCB447a03373D38d151F1c87EaD14594b662b' })
+            .then(function (qtdVotosCandidato) {
+                console.log('Quantidade Votos Gerais: ', qtdVotosCandidato);
                 expect(qtdVotosCandidato).toEqual('3');
             });
 
