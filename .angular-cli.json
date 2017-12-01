@@ -1,8 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "version": "1.0.0",
-    "name": "dapp-test"
+    "name": "dapp"
   },
   "apps": [
     {
@@ -40,7 +39,6 @@
     }
   ],
   "defaults": {
-    "styleExt": "scss",
-    "prefixInterfaces": false
+    "styleExt": "scss"
   }
 }
